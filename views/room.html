@@ -1,0 +1,125 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="room-container">
+    <div class="menu">
+        <div>메뉴</div>
+        <ul class="side-menu">
+        </ul>
+    </div>
+    <fieldset class="room-menu">
+        <legend class="room-title"></legend>
+        <table>
+            <thead class="room-header">
+                <tr>
+                    <th>제목</th>
+                    <th>현재 인원</th>
+                    <th>허용 인원</th>
+                    <th>생성시간</th>
+                </tr>
+            </thead>
+            <tbody class="room-indexs">
+                {% for room in rooms %}
+                    <tr data-id="{{room._id}}">
+                        <td class="title-font">{{room.title}}</td>
+                        <td id="{{room._id}}">{{room.members}}</td>
+                        <td>{{room.max}}</td>
+                        <td class="room-time">{{room.createdAt}}</td>
+                        <td><button 
+                            data-id="{{room._id}}"
+                            class="join-btn">입장</button></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </fieldset>
+</div>
+<a href="/createRoom" id="createRoom" >채팅방 생성</a>
+{% endblock %}
+
+{% block script %}
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    const socket = io.connect('http://localhost:8008/room', {
+        path: '/socket.io',
+    });
+    
+    socket.on('members', function (data) {
+        let userCount = document.getElementById(data.id);
+        const tr = document.createElement('tr');
+        let td = document.createElement('td');
+        if(data.size == 0) {
+            userCount.textContent = 0;    
+        }else
+            userCount.textContent = data.size;
+        tr.appendChild(td);
+    });
+
+    socket.on('newRoom', function (data) {
+        let engToKr1 = changeFoodNameToKR(data.food);
+        let transTime = transferTime(data.createdAt);
+        const tr = document.createElement('tr');
+        let td = document.createElement('td');
+        td.classList.add('title-font');
+        td.textContent = data.title;
+        tr.appendChild(td);
+        td = document.createElement('td');
+        td.textContent = data.members;
+        tr.appendChild(td);
+        td = document.createElement('td');
+        td.textContent = data.max;
+        tr.appendChild(td);
+        td = document.createElement('td');
+        td.textContent = transTime;
+        tr.appendChild(td);
+        const button = document.createElement('button');
+        button.textContent = '입장';
+        button.dataset.id = data._id;
+        button.addEventListener('click', addBtnEvent);
+        tr.appendChild(button);
+        tr.dataset.id = data._id;
+        if (data.food == '{{food}}'){
+            document.querySelector('table tbody').appendChild(tr);
+        }
+    });
+
+    socket.on('removeRoom', function(data) {
+        document.querySelectorAll('tbody tr').forEach(function (tr) {
+            if (tr.dataset.id === data) {
+                tr.parentNode.removeChild(tr);
+            }
+        });
+    });
+
+    function addBtnEvent(e) {
+        axios.patch(`/update/${e.target.dataset.id}`, { food: '{{food}}' });
+        location.href = '/room/' + e.target.dataset.id;
+    }
+
+    document.querySelectorAll('.join-btn').forEach(function (btn) {
+        btn.addEventListener('click', addBtnEvent);
+    });
+
+    addFoodSidebar();
+    document.querySelectorAll('.change-room').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            location.href = '/main/' + btn.dataset.id;
+        });
+    });
+    window.onload = () => {
+        if (new URL(location.href).searchParams.get('error')) {
+            alert(new URL(location.href).searchParams.get('error'));
+        }
+    };
+
+    let engToKr = changeFoodNameToKR('{{food}}');
+    let $roomTitle = document.querySelectorAll('.room-title');
+    [...$roomTitle].forEach(elem => { elem.textContent = engToKr });
+
+    let $time = document.querySelectorAll('.room-time');
+    [...$time].forEach(ele => { ele.textContent = (transferTime(ele.textContent))});
+    
+    const $checkedRoom = document.getElementById('{{food}}');
+    $checkedRoom.id = 'checkedRoom';
+</script>
+{% endblock %}

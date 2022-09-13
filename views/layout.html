@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/earlyaccess/notosanskr.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="/script.js"></script>
+    <body>
+        <header>
+            <div id="menubar">
+                <div  id="logoimg">
+                    <a href="/main"><img src="/img/logo.png" alt="로고 이미지" width="10%"></a>
+                </div>           
+                {% if user and user.id %}
+                    <div class="login">
+                        <a href="/auth/logout"><img src="/img/logined.png" alt=""></a>
+                        <div>{{user.nick}}</div>
+                    </div>
+                {% else %}
+                    <div class="login">
+                        <a href="/login"><img src="/img/login.png" alt=""></a>
+                    </div>
+                {% endif %} 
+            </div>
+        </header>
+        {% block content %}
+        {% endblock %}
+    </body>
+    {% block script %}
+    {% endblock %}
+</html>

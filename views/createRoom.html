@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <fieldset>
+        <legend>방 생성</legend>
+        <form action="/createRoom" method="post">
+            <div>
+                <input type="text" name="title" placeholder="방제목">
+            </div>
+            <div>
+                <input type="number" name="max" placeholder="인원 (최소 2인)" min="2" value="2">
+            </div>
+            <div>
+                <select name="food" id="foods">음식</select>
+            </div>
+            <div>
+                <button type="submit">생성</button>
+            </div>
+        </form>
+    </fieldset>
+{% endblock %}
+{% block script %}
+<script>
+    let $foods = document.getElementById('foods');
+    let foodFragment = document.createDocumentFragment();
+    for (let i = 0; i < Object.keys($foodList).length; i++) {
+        let optionEl = document.createElement('option');
+        optionEl.value = Object.keys($foodList)[i];
+        optionEl.text = $foodList[optionEl.value];
+        foodFragment.appendChild(optionEl);
+    }
+    $foods.appendChild(foodFragment);
+</script>
+{% endblock %}

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/earlyaccess/notosanskr.css" rel="stylesheet">
+    <body>
+        <fieldset class="chat-room-border">
+            <div class="title-container">
+                <div>{{title}}</div>
+                <a href="/main/{{room.food}}"><img src="/exiticon.png"></a>
+            </div>
+            <div id="chat-list">
+                {% for chat in chats %}
+                    {% if chat.user === user %}
+                        <div class="my-msg">
+                            <div>{{chat.user}}</div>
+                            {% if chat.gif %}
+                                <img src="/img/{{chat.gif}}">
+                            {% else %}
+                                <div class="my-chat">{{chat.chat}}</div>
+                            {% endif %}
+                        </div>
+                    {% elif chat.user === 'system' %}
+                        <div class="sys-msg">
+                            <div>{{chat.chat}}</div>
+                        </div>
+                    {% else %}
+                        <div class="other-msg">
+                            <img src="/otherpin.png" alt="" class="other-pin">
+                            <div class="other-name">{{chat.user}}</div>
+                            {% if chat.gif %}
+                                <img src="/img/{{chat.gif}}" class="other-img">
+                            {% else %}
+                                <div class="other-chat">{{chat.chat}}</div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        
+        </fieldset>
+        <form action="/chat" method="post" id="chat-form" enctype="multipart/form-data">
+            <label for="gif" id="gif-btn"><img src="/사진 전송.png"></label>
+            <input type="file" id="gif" accept="img/*">
+            <input type="text" name="chat" id="chat" placeholder="메시지를 입력하세요.">
+            <input type="hidden" name="img_url" id="img_url">
+            <button type="submit" class="send-btn"><img src="/전송.png"></button>
+        </form> 
+    </body>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/script.js"></script>
+    <script>
+        const socket = io.connect('http://localhost:8080/chat', {
+            path: '/socket.io',
+        });
+
+
+        socket.on('join', function(data) {
+            const div = document.createElement('div');
+            div.classList.add('sys-msg');
+            const chat = document.createElement('div');
+            div.textContent = data.chat;
+            div.appendChild(chat);
+            document.getElementById('chat-list').appendChild(div);
+        });
+        
+        socket.on('exit', function(data) {
+            const div = document.createElement('div');
+            div.classList.add('sys-msg');
+            const chat = document.createElement('div');
+            div.textContent = data.chat;
+            div.appendChild(chat);
+            document.getElementById('chat-list').appendChild(div);
+        });
+    
+        socket.on('chat', function (data) {
+            const div = document.createElement('div');
+            const imgEl = document.createElement('img');
+            const name = document.createElement('div');
+            const chat = document.createElement('div');
+            imgEl.classList.add('other-pin');
+            if (data.user === '{{user}}') {
+                div.classList.add('my-msg');
+                chat.classList.add('my-chat');
+            } else {
+                div.classList.add('other-msg');
+                name.classList.add('other-name');
+                imgEl.src = '/otherpin.png';
+                div.appendChild(imgEl);
+            }
+            name.textContent = data.user;
+            div.appendChild(name);
+            if (data.chat) {
+                chat.textContent = data.chat;
+                if (data.user === '{{user}}'){
+                    div.appendChild(chat);
+                } else {
+                    chat.classList.add('other-chat');
+                    div.appendChild(chat);
+                }
+                
+            } else {
+                const gif = document.createElement('img');
+                gif.classList.add('other-img');
+                gif.src = '/img/' + data.gif;
+                div.appendChild(gif);
+            }
+            document.getElementById('chat-list').appendChild(div);
+            scrollToBottom();
+        });
+    
+        document.getElementById('chat-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            console.log(this.img_url.value);
+            if (e.target.chat.value) {
+                if (e.target.img_url.value) {
+                    axios.post('/room/{{room._id}}/chat', {
+                        chat: this.chat.value,
+                        gif: this.img_url.value,
+                    })
+                    .then(() => {
+                        e.target.chat.value = '';
+                        e.target.img_url.value = '';
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+                }else{
+                    axios.post('/room/{{room._id}}/chat', {
+                        chat: this.chat.value,
+                    })
+                    .then(() => {
+                        e.target.chat.value = '';
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+                }
+            }else if (e.target.img_url.value) {
+                if (e.target.chat.value) {
+                    axios.post('/room/{{room._id}}/chat', {
+                        chat: this.chat.value,
+                        gif: this.img_url.value,
+                    })
+                    .then(() => {
+                        e.target.chat.value = '';
+                        e.target.img_url.value = '';
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+                }else {
+                    
+                    axios.post('/room/{{room._id}}/chat', {
+                        gif: this.img_url.value,
+                    })
+                    .then(() => {
+                        e.target.chat.value = '';
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+                }
+            }
+        });
+
+
+        if (document.querySelector('#gif')){
+            document.querySelector('#gif').addEventListener('change', function (e) {
+            console.log(this.files);
+            const formData = new FormData();
+            formData.append('img', this.files[0]);
+            axios.post('/post/img', formData)
+                .then((res) => {
+                    e.target.file = null;
+                    document.querySelector('#img_url').value = res.data.url;
+                })
+                .catch((err) => {
+                    console.log(err);
+                    console.error(err);
+                });
+            });
+        }
+        scrollToBottom();
+        window.onload = () => {
+            if (new URL(location.href).searchParams.get('error')) {
+                alert(new URL(location.href).searchParams.get('error'));
+            }
+        };
+        
+    </script>
+</html>

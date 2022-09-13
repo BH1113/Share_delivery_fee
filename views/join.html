@@ -1,0 +1,94 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="signup-back">
+    <form action="/auth/join" method="post" id="signup">
+        <div>
+            <label for="userId">아이디</label>
+            <input type="text" id="userId" class="text-field" name="nick" placeholder="아이디 입력">
+            <button id="idCheckForm">아이디 중복검사</button>
+            <pre></pre>
+        </div>
+        <div>
+            <label for="userPass">비밀번호</label>
+            <input type="password" id="userPass" class="text-field" name="password" placeholder="비밀번호 입력">
+            <pre></pre>
+        </div>
+        <input type="button" value="회원가입" onclick="formValidator()">
+    </form>
+</div>
+{% endblock %}
+{% block script %}
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    let $userId = document.getElementById('userId');
+    let $userPass = document.getElementById('userPass');
+    let idCheckForm = document.getElementById('idCheckForm');
+    let $userCheck = {
+        nick: false,
+        password: false,
+    };
+
+    idCheckForm.addEventListener('click', async function(e) {
+        e.preventDefault();
+        const data = {nick: $userId.value}
+        await axios.post('/joinCheck', data)
+            .then((res) => {
+                try{
+                    if (res.data === 'error'){
+                        idCheckForm.nextSibling.textContent = '아이디중복';
+                    }else if ($userId.value === ''){
+                        idCheckForm.nextSibling.textContent = '아이디를 입력해주시기 바랍니다.';
+                    }else {
+                        idCheckForm.nextSibling.textContent = '사용가능';
+                        $userPass.focus();
+                        $userCheck.nick = true;
+                    }
+                }catch(error) {
+                    console.error(error);
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    });
+
+    $userPass.addEventListener('blur', function() {
+        if(this.value == '') return;
+        else{
+            if(this.value.length <= 8){
+                $userCheck.password = true;
+                this.nextSibling.textContent ='사용가능한 비밀번호 입니다.';
+            }else
+                this.nextSibling.textContent = '비밀번호는 8자리 이하입니다.';
+        }
+        
+    });
+    
+    $userPass.addEventListener('keyup', function(e) {
+        if(e.key !== 'Enter') return;
+        if(this.value.length <= 8){
+            this.nextSibling.textContent ='사용가능한 비밀번호 입니다.';
+            $userCheck.password = true;
+        }
+        else
+            this.nextSibling.textContent = '비밀번호는 8자리 이하입니다.';
+    });
+
+    let formValidator = function() {
+        if (!$userCheck.nick) {
+            idCheckForm.nextSibling.textContent = '중복검사를 해주시기 바랍니다.';
+        }else if (!$userCheck.password) {
+            $userPass.nextSibling.textContent = '비밀번호를 확인해주세요.';
+            $userPass.focus();
+        }else {
+            document.getElementById('signup').submit();
+        }
+    };
+
+    window.onload = () => {
+        if (new URL(location.href).searchParams.get('error')) {
+            alert(new URL(location.href).searchParams.get('error'));
+        }
+    };
+</script>
+{% endblock %}

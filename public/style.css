@@ -1,0 +1,315 @@
+a:visited{text-decoration: none;}
+a:hover{text-decoration: none;}
+a:link{text-decoration: none;}
+
+#createRoom{float: right;}
+
+#menubar{
+    display: inline-block;
+}
+#logoimg{
+    display: inline-block;
+    width: 90%;
+    text-align: center;
+}
+#logoimg > a > img {
+    width: 40%;
+}
+.login{
+    float: right;
+    width: 10%;
+}
+.login > a > img {
+    width: 100%;
+}
+.login > div {
+    width: 100%;
+    font-size: small;
+}
+.my-msg{
+    text-align: right;
+    margin-right: 1.5em;
+}
+.my-msg > img {
+    width: 200px;
+}
+.other-img{
+    width: 200px;
+    margin-left: 1em;
+}
+.other-name {
+    margin-left: 1em;
+}
+.other-pin {
+    width: 50px;
+}
+.other-chat {
+    display: inline-block;
+    border-radius: 15px;
+    padding: 7px 15px;
+    margin-left: 1em;
+    margin-right: 1em;
+    border-color: #d1b2ff;
+    border-style: solid;
+}
+.my-chat {
+    display: inline-block;
+    border-radius: 15px;
+    padding: 7px 15px;
+    margin-bottom: 1em;
+    border-color: #3CB4FF;
+    border-style: solid;
+}
+.sys-msg{text-align: center;}
+.container{
+    justify-content:center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    grid-gap: 1rem;
+}
+.container-item{margin: 0 auto; background-color: white;}
+.join-room{background-color: white; border: none;}
+.join-btn{background-color: white; border: none;}
+.join-room > img{width: 100%;}
+.title-font {font-size: 0.9em;}
+.room-indexs > tr > td{ text-align: center; }
+
+.text-field {
+    font-size: 14px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    width: 93%;
+}
+.login-form {
+    width: 300px;
+    border: 0;
+    border-radius: 5px;
+    background-color: #ff7f00;
+    padding: 20px;
+    margin: 0 auto;
+}
+.login-btn {
+    color: black;
+    font-size: 14px;
+    background-color: rgb(216, 197, 90);
+    margin-bottom: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+}
+.register-btn {
+  color: #FFFFFF;
+  font-size: 14px;
+  background-color: #000000;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+}
+
+#signup input {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin: 0 10px;
+    width: 90%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+
+#signup button[type=submit] {
+    border-radius: 0px;
+    width: 100%;
+    border: none;
+    letter-spacing: 0.5em;
+    font-size: 1.2em;
+}
+
+.signup-back{
+    width: 300px;
+    border: 0;
+    border-radius: 5px;
+    background-color: #EEEFF1;
+    padding: 20px;
+    margin: 0 auto;
+}
+
+.menu {
+    display: inline-block;
+    overflow: hidden;
+    background-color: #ff7f00;
+    color: #fff;
+    transition: all 0.5s ease;
+    border-radius: 20px;
+    padding: 10px;
+    box-sizing: border-box;
+
+}
+.room-menu{
+    margin: 0 auto;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding: 0;
+    display: block;
+    width: 100%;
+}
+.room-title{
+    text-align: center;
+}
+.room-menu table{
+    width: 100%;
+}
+.room-container{
+    display: grid;
+    grid-template-columns: 20% 80%;
+}
+.menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.menu a, .menu > label {
+    display: block;
+    height: 25px;
+    cursor: pointer;
+    color: #fff;
+    text-decoration: none;
+}
+
+.menu ul li:hover, .menu > label:hover {
+    background-color: #fff;
+    border-radius: 10px;
+}
+.menu div {
+    line-height: 1.5;
+    font-size: 1.5em;
+    font-family: 'Noto Sans KR';
+}
+.menu > ul > li > a > img {
+    width: 100%;
+    height: auto;
+    vertical-align: middle;
+    display: inline-block;
+}
+#expand-menu {
+    display: none;
+}
+#expand-menu:checked ~ ul {
+    display: block;
+    height: auto;
+}
+
+.menu ::before {
+    font-family: 'Material Icons';
+    font-size: 1.5em;
+    float: left;
+    clear: left;
+}
+.menu label::before{ content: '\e5d2'; }
+#checkedRoom { 
+    background-color: #fff; 
+    border-radius: 10px;
+}
+#checkedRoom >label{
+    background-color: #fff;
+    color: #ff7f00;
+    border-radius: 10px;
+}
+
+#chat-form {
+    display: inline-block;
+    width: 100%;
+    border-color: #A366FF;
+    border-top-style: solid;
+    background-color: #6b66ff;
+}
+#gif-btn {
+    width: 10%;
+    display: inline-block;
+}
+#gif-btn > img {
+    width: 100%;
+}
+.send-btn {
+    width: 10%;
+    display: inline-block;
+    border-image: none;
+    border-color: #6b66ff;
+    background-color: #6b66ff;
+    border-width: 0;
+}
+.send-btn > img {
+    width: 100%;
+}
+#chat {
+    border: none;  
+    border-radius: 5px;
+    width: 75%;
+    margin-bottom: 1.2em;
+    display: inline-block;
+}
+#chat-form input[type="file"]{
+    display: none;
+}
+#chat-list {
+    height: 700px;
+    overflow-y: scroll;
+}
+
+.chat-room-border {
+    margin: 0 auto;
+    padding: 0;
+    border-color: #A366FF;
+    border-style: solid;
+}
+.title-container{
+    font-size: 1.5em;
+    font-weight: 600;
+    background-color: #A366FF;
+    border-color: #A366FF;
+    border-bottom-style: solid;
+    width: 100%;
+    height: 60px;
+}
+.title-container > div {
+    display: inline-block;
+    background-color: #d1b2ff;
+    margin: 0.3em;
+    border-radius: 1em;
+    padding: 0.3em;
+    width: 80%;
+}
+.title-container > a {
+    display: inline-block;
+    width: 10%;
+    text-align: center;
+}
+.title-container > a > img {
+    width: 80%;
+}
+
+@media screen and (max-width:1023px) {
+        
+    .menu label{
+        display: hidden;
+    }
+    
+    .menu div{
+        font-size: 1.5em;
+    }
+}
+@media screen and (max-width:560px) {
+    .menu #expand-menu:not(:checked) ~ ul {
+        display: none;
+    }
+    .menu > ul > li > a{
+        padding-top: 15%;
+        padding-bottom: 15%;
+    }
+
+    
+} 

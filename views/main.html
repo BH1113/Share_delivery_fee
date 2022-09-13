@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="container"></div>
+{% endblock %}
+{% block script %}
+
+<script>
+    addFoodMenu();
+    
+
+    document.querySelectorAll('.join-room').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            location.href = '/main/' + btn.dataset.id;
+        });
+    });
+    
+</script>
+{% endblock %}

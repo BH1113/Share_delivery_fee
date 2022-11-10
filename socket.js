@@ -84,7 +84,7 @@ module.exports = (server, app, sessionMiddleware) => {
                 size: members.size,
                 id: roomId,
             });
-            await axios.patch(`http://172.16.5.36:8008/update/chat/${roomId}`, { size: members.size });
+            await axios.patch(`http://localhost:8080/update/chat/${roomId}`, { size: members.size });
         } else{
             io.of('/room').emit('members', {
                 size: 0,
